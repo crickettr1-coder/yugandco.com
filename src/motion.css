@@ -1,0 +1,68 @@
+/* Motion layer: transform and opacity keep animation smooth without shifting layout. */
+.reference-hero{overflow:hidden}
+.services-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.service-card{min-width:0}.service-card h3{overflow-wrap:break-word}
+.button,.header .talk{position:relative;overflow:hidden;background-size:210% 100%;transition:background-position .4s,transform .3s,box-shadow .3s}
+.button:before,.header .talk:before{content:'';position:absolute;inset:-40% auto -40% -65%;width:35%;background:linear-gradient(90deg,transparent,#ffffff55,transparent);transform:skewX(-22deg);pointer-events:none;transition:left .65s}
+.button:is(:hover,:focus-visible),.header .talk:is(:hover,:focus-visible){background-position:100% 0;transform:translateY(-5px);box-shadow:0 12px 28px #9653d445}
+.button:is(:hover,:focus-visible):before,.header .talk:is(:hover,:focus-visible):before{left:135%}
+.header nav>a:not(.talk),.nav-services>a{position:relative}
+.header nav>a:not(.talk):after,.nav-services>a:after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--gradient);transform:scaleX(0);transform-origin:left;transition:transform .25s}
+.header nav>a:is(:hover,:focus-visible):after,.nav-services>a:is(:hover,:focus-visible):after{transform:scaleX(1)}
+.header .talk span,.card-link span{transition:transform .35s}
+.header .talk:is(:hover,:focus-visible) span,.service-card:is(:hover,:focus-visible) .card-link span{transform:rotate(90deg)}
+.service-card{padding:25px 20px;transition:transform .35s,background .35s,box-shadow .35s;isolation:isolate}
+.service-card:is(:hover,:focus-visible){transform:translateY(-12px);background:#fff;box-shadow:0 22px 45px #9653d422}
+.service-card .line-icon{display:inline-block;transition:transform .4s,color .3s}
+.service-card:is(:hover,:focus-visible) .line-icon{transform:rotate(-12deg) scale(1.18);color:var(--purple)}
+.service-card .card-link{transition:gap .3s,color .3s}
+.service-card:is(:hover,:focus-visible) .card-link{gap:25px;color:#6e30b0}
+.capability-card{transition:translate .45s,filter .45s}
+.capability-card:hover{translate:0 -15px;filter:drop-shadow(0 18px 15px #9653d426)}
+.portrait-caption{transition:background .35s,color .35s}
+.capability-card:hover .portrait-caption{background:var(--purple);color:white}
+.capability-card:hover .portrait-caption p{color:#f3e6ff}
+.about-photo,.gallery-image,.insight-card{overflow:hidden}
+.about-photo img,.why-photo>img,.gallery-image img,.insight-card>img{transition:transform .7s cubic-bezier(.22,.61,.36,1),filter .5s;will-change:auto}
+.about-photo:hover img,.why-photo:hover>img{transform:scale(1.055)}
+.gallery-card:hover .gallery-image img,.gallery-card:focus-within .gallery-image img{transform:scale(1.08)}
+.gallery-card h3{transition:color .3s,translate .3s}
+.gallery-card:hover h3{color:var(--purple);translate:8px 0}
+.concept-label{transition:background .3s,color .3s,translate .3s}
+.gallery-card:hover .concept-label{background:var(--purple);color:white;translate:0 -8px}
+.insight-card{overflow:visible;transition:transform .35s}
+.insight-card>img{clip-path:inset(0)}
+.insight-card:is(:hover,:focus-visible){transform:translateY(-10px)}
+.insight-card:is(:hover,:focus-visible)>img{transform:scale(1.025)}
+.insight-card>div{transition:box-shadow .35s}
+.insight-card:is(:hover,:focus-visible)>div{box-shadow:0 18px 35px #9653d422}
+.insight-card:is(:hover,:focus-visible) h3{color:var(--purple)}
+.review-card{animation:float 5s 1.8s ease-in-out infinite}
+.hero-portrait{transform:translate3d(var(--pointer-x,0px),var(--pointer-y,0px),0);transition:transform .7s ease-out}
+.portrait-composition .float-card{translate:calc(var(--pointer-x,0px) * -.6) calc(var(--pointer-y,0px) * -.6);transition:translate .7s ease-out}
+.hero-copy>.eyebrow,.hero-copy>h1,.hero-description,.hero-actions{animation:hero-enter .9s cubic-bezier(.2,.7,.2,1) both}
+.hero-copy>h1{animation-delay:.13s}.hero-description{animation-delay:.26s}.hero-actions{animation-delay:.39s}
+.hero-portrait{animation:portrait-enter 1.15s .1s cubic-bezier(.2,.7,.2,1) both}
+.mini-chart i{animation:bar-breathe 3s calc(var(--i) * .15s) ease-in-out infinite;transform-origin:bottom}
+.hero-scroll span{animation:scroll-nudge 2.5s ease-in-out infinite}
+.marquee>div{animation-duration:24s}
+.marquee:hover>div,.marquee:focus-within>div{animation-play-state:paused}
+.process-panel:not([hidden]){animation:panel-enter .4s ease-out}
+.process-tabs button{transition:background .25s,transform .25s,box-shadow .25s}
+.process-tabs button:is(:hover,:focus-visible){transform:translateY(-3px);box-shadow:0 5px 15px #9653d425}
+details summary{transition:color .25s}details summary:is(:hover,:focus-visible){color:var(--purple)}details summary span{transition:transform .25s}details[open] p{animation:panel-enter .35s ease-out}
+.footer-inner>div:not(.footer-intro)>a{transition:padding-left .25s,color .25s}.footer-inner>div:not(.footer-intro)>a:is(:hover,:focus-visible){padding-left:8px;color:#d4a6ff}
+.back-to-top{transition:transform .25s,background .25s}.back-to-top:hover{transform:translateY(-5px);background:var(--purple)}
+.will-reveal{translate:0 46px;transition:opacity .8s cubic-bezier(.2,.7,.2,1),translate .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--reveal-delay,0ms)}
+.will-reveal.visible{translate:0 0;opacity:1}
+.motion-toggle{position:fixed;left:18px;bottom:18px;z-index:30;border:1px solid #d9c7ed;border-radius:30px;background:#fffffff0;color:var(--ink);box-shadow:0 5px 20px #252a4e15;backdrop-filter:blur(8px);padding:9px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px}
+.motion-toggle:before{content:'Ⅱ';color:var(--purple);font-size:15px;font-weight:900}.motion-toggle[aria-pressed=false]:before{content:'▷'}.motion-toggle:hover{background:#efe3ff}
+@keyframes hero-enter{from{opacity:0;translate:0 35px}to{opacity:1;translate:0 0}}
+@keyframes portrait-enter{from{opacity:0;translate:30px 20px}to{opacity:1;translate:0 0}}
+@keyframes panel-enter{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+@keyframes bar-breathe{0%,100%{transform:scaleY(.65)}50%{transform:scaleY(1)}}
+@keyframes scroll-nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+html[data-motion=off]{scroll-behavior:auto}html[data-motion=off] *,html[data-motion=off] *:before,html[data-motion=off] *:after{animation:none!important;transition:none!important}html[data-motion=off] .will-reveal{opacity:1;translate:none}html[data-motion=off] .hero-portrait{transform:none}html[data-motion=off] .portrait-composition .float-card{translate:none}html[data-motion=off] .gallery{scroll-behavior:auto}
+@media(hover:none){.service-card:hover,.insight-card:hover{transform:none}.motion-toggle{left:12px;bottom:12px;font-size:11px;padding:8px 11px}}
+@media(max-width:700px){.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.service-card{padding:20px 10px}.service-card h3{font-size:21px}}
+@media(max-width:380px){.services-grid{grid-template-columns:minmax(0,1fr)}.service-card h3{font-size:25px}}
+@media(prefers-reduced-motion:reduce){html:not([data-motion=on]) *,html:not([data-motion=on]) *:before,html:not([data-motion=on]) *:after{animation:none!important;transition:none!important}html:not([data-motion=on]) .will-reveal{opacity:1;translate:none}}

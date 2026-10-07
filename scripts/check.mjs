@@ -25,7 +25,7 @@ try {
  await page.emulateMedia({reducedMotion:'no-preference'});
  await page.setViewportSize({width:1440,height:1000});
  await page.goto(origin);
- await page.locator('.service-card').first().scrollIntoViewIfNeeded();await page.waitForTimeout(800);
+ await page.locator('.service-card').first().scrollIntoViewIfNeeded();await page.waitForTimeout(1100);
  assert.equal(await page.locator('.service-card').first().evaluate(e=>getComputedStyle(e).opacity),'1','Scroll reveal');
  await page.goto(origin);let links=await page.locator('a[href]').evaluateAll(els=>els.map(a=>a.getAttribute('href')));
  for(const href of [...new Set(links)]){if(href.startsWith('#')){assert(await page.locator(href).count(),`Missing ${href}`);}else if(href.startsWith('/')){const [route,hash]=href.split('#');const response=await page.request.get(origin+route);assert.equal(response.status(),200,href);if(hash){await page.goto(origin+route);assert(await page.locator('#'+hash).count(),href);}}}
