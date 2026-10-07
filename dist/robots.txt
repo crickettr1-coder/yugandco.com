@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yugandco.com/sitemap.xml
