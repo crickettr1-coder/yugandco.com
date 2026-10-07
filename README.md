@@ -16,9 +16,11 @@ Open http://127.0.0.1:4173. Stop with Ctrl+C. No application dependencies or bac
 
 ## Edit
 
-- Homepage, FAQs, process and concept project text: `scripts/build.mjs`.
+- Homepage, FAQs, process and concept gallery text: `templates/home.mjs`.
+- Shared header, footer, enquiry form and page generation: `scripts/build.mjs`.
+- Original practical guides: `content/insights.js`.
 - Six service pages: `content/services.js`.
-- Colours, typography, spacing and mobile layouts: `src/styles.css`.
+- Colours, typography, spacing and mobile layouts: `src/reference.css`.
 - Navigation, scroll reveals and form handling: `src/app.js`.
 - Confirmed domain, email, phone and enquiry endpoint: `site.config.js`. Email and phone are deliberately blank and not displayed. Never put secrets in this public configuration.
 - Original hero artwork: `assets/blue-ribbon.png`. The build copies it into the deployable asset directory.
@@ -39,4 +41,6 @@ Without an endpoint, submitting never sends information or claims success. No ph
 
 Keep the local server running, then run `npm run check`. The check uses installed Microsoft Edge in headless mode. It checks 1440, 768, 390 and 320 pixel widths, images, internal navigation, metadata, mobile menu, unconnected form, mocked rejection/acceptance responses and reduced motion. Screenshots and the report are saved in ignored `qa/`.
 
-Fonts use Google Fonts with local system fallbacks. The blue ribbon is original generated artwork; portfolio visuals are original typographic design concepts. No assets from the reference theme were copied.
+The current design recreates the composition of Choicy Home 04 for Yug & Co with original HTML, CSS, JavaScript and copy. Reference photography and decorative assets are saved locally in `assets/choicy/`; source URLs are recorded in `assets/choicy/sources.json`. These are third-party theme-demo assets, not original Yug & Co photography. Portraits are illustrative and do not identify Yug & Co staff. Portfolio gallery entries are independent concepts, not client commissions or results. Theme logos, client claims, testimonials and fabricated metrics are omitted. Fonts use Google Fonts with system fallbacks.
+
+The preceding ivory-and-blue version is preserved outside the project in `../previous-version/`, and its source remains available in Git history at commit `030bffce5c089147e2739f87b3e79bdfb2651b0a`.
