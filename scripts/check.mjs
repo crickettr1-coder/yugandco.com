@@ -14,7 +14,13 @@ try {
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.setViewportSize({width,height:900});await page.goto(origin,{waitUntil:'networkidle'});
   await page.evaluate(async()=>{for(let y=0;y<document.body.scrollHeight;y+=600){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,60));}window.scrollTo(0,0);});
-  await page.waitForTimeout(250);
+  for(const gallery of await page.locator('.gallery').all()){
+   await gallery.scrollIntoViewIfNeeded();
+   await gallery.evaluate(async e=>{for(let x=0;x<e.scrollWidth;x+=e.clientWidth){e.scrollLeft=x;await new Promise(r=>setTimeout(r,100));}e.scrollLeft=0;});
+  }
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.waitForTimeout(500);
+  if(width<=980){assert(await page.evaluate(()=>document.querySelector('.hero-copy').getBoundingClientRect().bottom<=document.querySelector('.portrait-composition').getBoundingClientRect().top),'Hero text overlaps illustration');}
   assert(!/[âÃ�]/.test(await page.locator('body').innerText()),'Corrupted text encoding');
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Overflow at ${width}`);
   assert(await page.locator('img').evaluateAll(imgs=>imgs.every(i=>i.complete&&i.naturalWidth>0)),'Broken image');

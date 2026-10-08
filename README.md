@@ -21,6 +21,7 @@ Open http://127.0.0.1:4173. Stop with Ctrl+C. No application dependencies or bac
 - Original practical guides: `content/insights.js`.
 - Six service pages: `content/services.js`.
 - Colours, typography, spacing and mobile layouts: `src/reference.css`.
+- Reference-aligned proportions and final design refinements: `src/refinement.css`.
 - Motion and hover styling: `src/motion.css`. The site has a visible motion toggle; it follows the system reduced-motion setting by default and remembers an explicit choice on this device.
 - Navigation, scroll reveals and form handling: `src/app.js`.
 - Confirmed domain, email, phone and enquiry endpoint: `site.config.js`. Email and phone are deliberately blank and not displayed. Never put secrets in this public configuration.
@@ -44,6 +45,6 @@ Keep the local server running, then run `npm run check`. The check uses installe
 
 Run `node scripts/check-motion.mjs` to verify actual movement over time, hover lifts and photo zoom, gallery autoplay, scroll reveals, pause/resume and reduced-motion behaviour.
 
-The current design recreates the composition of Choicy Home 04 for Yug & Co with original HTML, CSS, JavaScript and copy. Reference photography and decorative assets are saved locally in `assets/choicy/`; source URLs are recorded in `assets/choicy/sources.json`. These are third-party theme-demo assets, not original Yug & Co photography. Portraits are illustrative and do not identify Yug & Co staff. Portfolio gallery entries are independent concepts, not client commissions or results. Theme logos, client claims, testimonials and fabricated metrics are omitted. Fonts use Google Fonts with system fallbacks.
+The current design recreates the composition of Choicy Home 04 for Yug & Co with original HTML, CSS, JavaScript and copy. Reference photography and decorative assets are saved locally in `assets/choicy/`; source URLs are recorded in `assets/choicy/sources.json`. These are third-party theme-demo assets, not original Yug & Co photography. Portraits are illustrative and do not identify Yug & Co staff. Portfolio gallery entries are independent concepts, not client commissions or results. Theme logos, client claims, testimonials and fabricated metrics are omitted. Urbanist fonts are self-hosted in `assets/fonts/` with system fallbacks; styling and typography need no external font request. Original functional SVG service icons live in `templates/icons.mjs`.
 
 The preceding ivory-and-blue version is preserved outside the project in `../previous-version/`, and its source remains available in Git history at commit `030bffce5c089147e2739f87b3e79bdfb2651b0a`.
