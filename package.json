@@ -1,1 +1,1 @@
-{"name":"yug-and-co","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","dev":"node scripts/serve.mjs","check":"node scripts/check.mjs"},"devDependencies":{"@playwright/test":"^1.63.0"}}
+{"name":"yug-and-co","private":true,"type":"module","scripts":{"build":"node scripts/build-agency.mjs","dev":"node scripts/serve.mjs","check":"node scripts/check-agency.mjs"},"devDependencies":{"@playwright/test":"^1.63.0"}}

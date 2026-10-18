@@ -1,6 +1,18 @@
 # Yug & Co
 
-An original, static HTML/CSS/JavaScript agency website. Source lives in `scripts/build.mjs`, `content/services.js`, `src/` and `site.config.js`; generated deployable files live in `dist/`.
+An original, static HTML/CSS/JavaScript digital marketing company website with 17 pages. Current page templates live in `templates/agency.mjs`, service and process content in `content/services.js` and `content/agency.js`, styles and interactions in `src/agency.css` and `src/agency.js`, and public business details in `site.config.js`. `npm run build` runs `scripts/build-agency.mjs` and generates deployable files in `dist/`.
+
+## Current agency design
+
+The October 2026 agency version uses a deep green, warm white and lime visual system with original HTML/CSS marketing diagrams. It includes Home, About, Services, six individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact and Privacy. Campaign plans are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
+
+Without a delivery endpoint or verified business email, the contact form downloads a local text brief and does not send an enquiry. Add approved public contact details to `site.config.js` and rebuild. With an email configured, the form opens a prepared email for the visitor to review and send. With an endpoint configured, success requires an HTTP 2xx response and `{ "accepted": true }`.
+
+`npm run check` runs `scripts/check-agency.mjs`, checks all 17 routes at 1440, 768, 390 and 320 pixels, internal links, metadata, mobile navigation, FAQ, brief downloads and mocked submission outcomes. Screenshots and reports are written to ignored `qa/`. Optional `AGENCY_TEST_URL` changes the test origin.
+
+The GitHub `main` branch contains source and build output. The `production` branch contains only the `dist/` tree for Hostinger deployment. Do not publish source directories into the domain document root.
+
+The following historical notes describe the preceding portrait-led design; its files remain available for reference. The current build does not use `templates/home.mjs`, `src/reference.css`, `src/refinement.css`, `src/motion.css` or `src/app.js`.
 
 ## Run locally
 

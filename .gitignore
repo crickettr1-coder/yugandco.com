@@ -3,3 +3,4 @@ node_modules/
 qa/
 *.zip
 *.tar.gz
+local-server*.log

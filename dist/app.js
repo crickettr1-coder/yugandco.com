@@ -1,41 +1,26 @@
-const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
-let savedMotion;try{savedMotion=localStorage.getItem('yug-motion');}catch{}
-let motionEnabled=savedMotion==='on'||(savedMotion!=='off'&&!motionPreference.matches);
-document.documentElement.dataset.motion=motionEnabled?'on':'off';
-const motionToggle=document.createElement('button');motionToggle.type='button';motionToggle.className='motion-toggle';document.body.append(motionToggle);
-function updateMotionControl(){motionToggle.textContent=motionEnabled?'Motion on':'Motion off';motionToggle.setAttribute('aria-pressed',String(motionEnabled));motionToggle.setAttribute('aria-label',motionEnabled?'Pause motion':'Enable motion');}
-updateMotionControl();
-motionToggle.addEventListener('click',()=>{motionEnabled=!motionEnabled;savedMotion=motionEnabled?'on':'off';document.documentElement.dataset.motion=savedMotion;try{localStorage.setItem('yug-motion',savedMotion);}catch{}updateMotionControl();if(!motionEnabled){document.querySelectorAll('.will-reveal').forEach(el=>el.classList.add('visible'));document.querySelector('.portrait-composition')?.style.setProperty('--pointer-x','0px');document.querySelector('.portrait-composition')?.style.setProperty('--pointer-y','0px');}});
-motionPreference.addEventListener('change',()=>{if(savedMotion==='on'||savedMotion==='off')return;motionEnabled=!motionPreference.matches;document.documentElement.dataset.motion=motionEnabled?'on':'off';updateMotionControl();});
 const toggle=document.querySelector('.menu-toggle');
 const nav=document.querySelector('#navigation');
-function closeMenu(){toggle?.setAttribute('aria-expanded','false');nav?.classList.remove('open');}
-toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open);});
-nav?.addEventListener('click',e=>{if(e.target.closest('a'))closeMenu();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){closeMenu();toggle.focus();}});
-const serviceToggle=document.querySelector('.services-toggle');
-const serviceDropdown=document.querySelector('#services-dropdown');
-function setServices(open){serviceToggle?.setAttribute('aria-expanded',String(open));serviceDropdown?.classList.toggle('open',open);}
-serviceToggle?.addEventListener('click',()=>setServices(serviceToggle.getAttribute('aria-expanded')!=='true'));
-document.addEventListener('click',e=>{if(!e.target.closest('.nav-services'))setServices(false);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&serviceToggle?.getAttribute('aria-expanded')==='true'){setServices(false);serviceToggle.focus();}});
-const processTabs=[...document.querySelectorAll('[role="tab"][data-step]')];
-function activateStep(index){processTabs.forEach((tab,i)=>{tab.setAttribute('aria-selected',String(i===index));tab.tabIndex=i===index?0:-1;document.getElementById(tab.getAttribute('aria-controls')).hidden=i!==index;});}
-processTabs.forEach((tab,index)=>{tab.addEventListener('click',()=>activateStep(index));tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%processTabs.length;else if(event.key==='ArrowLeft')next=(index+processTabs.length-1)%processTabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=processTabs.length-1;else return;event.preventDefault();activateStep(next);processTabs[next].focus();});});
-document.querySelectorAll('[data-gallery]').forEach(button=>button.addEventListener('click',()=>{const direction=button.dataset.gallery==='next'?1:-1;document.querySelectorAll('.gallery').forEach(gallery=>{const card=gallery.querySelector('.gallery-card');gallery.scrollBy({left:direction*(card.getBoundingClientRect().width+30),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});}));
-if('IntersectionObserver' in window&&motionEnabled){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}}),{threshold:.08});document.querySelectorAll('.reveal,.section-heading,.center-heading,.about-copy,.reference-about h2,.reference-why>div:first-child,.faq>div:first-child,.contact>div:first-child').forEach(el=>{el.classList.add('will-reveal');observer.observe(el);});document.querySelectorAll('.services-grid,.capability-grid,.insights-grid').forEach(group=>[...group.children].forEach((el,index)=>el.style.setProperty('--reveal-delay',`${index%3*110}ms`)));}
-const composition=document.querySelector('.portrait-composition');
-document.querySelector('.reference-hero')?.addEventListener('pointermove',event=>{if(!motionEnabled||event.pointerType==='touch'||!matchMedia('(hover: hover) and (pointer: fine)').matches)return;const rect=event.currentTarget.getBoundingClientRect();composition?.style.setProperty('--pointer-x',`${(event.clientX-rect.left-rect.width/2)/rect.width*24}px`);composition?.style.setProperty('--pointer-y',`${(event.clientY-rect.top-rect.height/2)/rect.height*16}px`);});
-document.querySelector('.reference-hero')?.addEventListener('pointerleave',()=>{composition?.style.setProperty('--pointer-x','0px');composition?.style.setProperty('--pointer-y','0px');});
-const galleries=[...document.querySelectorAll('.gallery')].map((element,index)=>({element,direction:index===0?1:-1,visible:false,hover:false,manualUntil:0,remainder:0}));
-if('IntersectionObserver' in window){const watcher=new IntersectionObserver(entries=>entries.forEach(entry=>{const gallery=galleries.find(g=>g.element===entry.target);if(gallery)gallery.visible=entry.isIntersecting;}),{threshold:.12});galleries.forEach(g=>{watcher.observe(g.element);g.element.addEventListener('pointerenter',()=>g.hover=true);g.element.addEventListener('pointerleave',()=>g.hover=false);g.element.addEventListener('pointerdown',()=>g.manualUntil=performance.now()+6000);g.element.addEventListener('wheel',()=>g.manualUntil=performance.now()+6000,{passive:true});});}
-document.querySelectorAll('[data-gallery]').forEach(button=>button.addEventListener('click',()=>galleries.forEach(g=>g.manualUntil=performance.now()+6000)));
-let lastFrame=0;
-function moveGalleries(now){const elapsed=Math.min(now-lastFrame,50);lastFrame=now;if(motionEnabled&&!document.hidden){galleries.forEach(g=>{if(!g.visible||g.hover||g.manualUntil>now||g.element.contains(document.activeElement))return;const maximum=g.element.scrollWidth-g.element.clientWidth;if(maximum<=0)return;g.element.style.scrollSnapType='none';g.element.style.scrollBehavior='auto';if(g.element.scrollLeft>=maximum-1)g.direction=-1;if(g.element.scrollLeft<=1)g.direction=1;g.remainder+=elapsed*.024;const pixels=Math.floor(g.remainder);g.remainder-=pixels;g.element.scrollLeft+=g.direction*pixels;});}requestAnimationFrame(moveGalleries);}
-if(galleries.length)requestAnimationFrame(moveGalleries);
+const closeMenu=()=>{toggle?.setAttribute('aria-expanded','false');nav?.classList.remove('open');};
+toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));nav?.classList.toggle('open',open);});
+nav?.addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){closeMenu();toggle.focus();}});
 const form=document.querySelector('#enquiry-form');
 const status=document.querySelector('#form-status');
-let config;
-try {const response=await fetch('/config.json');if(!response.ok)throw Error();config=await response.json();}catch {if(status)status.textContent='Enquiries are temporarily unavailable. Your details have not been sent.';}
-if(config?.enquiryEndpoint&&status)status.textContent='Tell us about your project using the form above.';
-form?.addEventListener('submit',async event=>{event.preventDefault();if(!form.reportValidity())return;if(!config?.enquiryEndpoint){status.textContent='Your enquiry has not been sent. An enquiry service needs to be connected before we can receive messages.';return;}const submit=form.querySelector('button[type="submit"]');submit.disabled=true;status.textContent='Sending your enquiry…';try{const response=await fetch(config.enquiryEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form))),signal:AbortSignal.timeout(15000)});const result=await response.json();if(!response.ok||result.accepted!==true)throw Error();status.textContent='Your enquiry has been accepted. Thank you for telling us about your project.';form.reset();}catch{status.textContent='We could not confirm your enquiry was accepted. Your details remain here; please try again later.';}finally{submit.disabled=false;}});
+if(form){
+ const selected=new URLSearchParams(location.search).get('service');
+ if(selected&&[...form.elements.service.options].some(o=>o.value===selected))form.elements.service.value=selected;
+ let config;
+ try{const r=await fetch('/config.json');if(!r.ok)throw Error();config=await r.json();}catch{status.textContent='The project brief is temporarily unavailable. Please reload before continuing.';}
+ form.addEventListener('submit',async event=>{
+  event.preventDefault();if(!form.reportValidity()||!config)return;
+  const data=Object.fromEntries(new FormData(form));
+  const brief=`YUG & CO — PROJECT BRIEF\n\nName: ${data.name}\nEmail: ${data.email}\nCompany / website: ${data.company}\nService: ${data.service}\n\nProject details\n${data.message}\n`;
+  if(!config.enquiryEndpoint){
+   if(config.email){location.href=`mailto:${encodeURIComponent(config.email)}?subject=${encodeURIComponent('Project enquiry: '+data.service)}&body=${encodeURIComponent(brief)}`;status.textContent='Your email app has been requested. Review and send the message there; this website has not sent it.';}
+   else{const url=URL.createObjectURL(new Blob([brief],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='yug-and-co-project-brief.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Your brief is ready to save. No enquiry has been sent and your details remain here.';}
+   return;
+  }
+  const button=form.querySelector('button[type="submit"]');button.disabled=true;status.textContent='Sending your enquiry…';
+  try{const r=await fetch(config.enquiryEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),signal:AbortSignal.timeout(15000)});const result=await r.json();if(!r.ok||result.accepted!==true)throw Error();status.textContent='Your enquiry has been accepted. Thank you for sharing your project.';form.reset();}catch{status.textContent='We could not confirm delivery. Your details remain here; please try again later.';}finally{button.disabled=false;}
+ });
+}
