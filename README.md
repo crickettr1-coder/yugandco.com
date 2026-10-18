@@ -1,16 +1,16 @@
 # Yug & Co
 
-An original, static HTML/CSS/JavaScript digital marketing company website with 17 pages. Current page templates live in `templates/agency.mjs`, service and process content in `content/services.js` and `content/agency.js`, styles and interactions in `src/agency.css` and `src/agency.js`, and public business details in `site.config.js`. `npm run build` runs `scripts/build-agency.mjs` and generates deployable files in `dist/`.
+An original, static HTML/CSS/JavaScript digital marketing company website with 24 pages. Shared page templates live in `templates/agency.mjs`; `templates/growth.mjs` and `content/growth.js` add service explanations, business solutions and an interactive goal selector. Public business details live in `site.config.js`. `npm run build` runs `scripts/build-agency.mjs` and generates deployable files in `dist/`.
 
 ## Current agency design
 
 The current creative agency version uses lavender, cobalt, peach and warm white. `templates/creative.mjs` adds an original sculptural ribbon hero, illustrative campaign previews and the Work navigation link to the shared company pages. `src/creative.css` adds the creative visual system, responsive layouts and motion. The existing original `assets/blue-ribbon.png` is the hero artwork. Motion has an explicit pause/resume control and follows reduced-motion preferences.
 
-The 17 pages include Home, About, Services, six individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact and Privacy. Campaign plans and design previews are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
+The 24 pages include Home, About, Services, eight individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact, Privacy, a Solutions hub, three business-specific solution pages and Working Together. Each service page has a practical visual explanation, customer journey, measurement definitions and four FAQs. Campaign plans and design previews are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
 
 Without a delivery endpoint or verified business email, the contact form downloads a local text brief and does not send an enquiry. Add approved public contact details to `site.config.js` and rebuild. With an email configured, the form opens a prepared email for the visitor to review and send. With an endpoint configured, success requires an HTTP 2xx response and `{ "accepted": true }`.
 
-`npm run check` runs `scripts/check-agency.mjs`, checks all 17 routes at 1440, 768, 390 and 320 pixels, internal links, metadata, mobile navigation, FAQ, brief downloads and mocked submission outcomes. Screenshots and reports are written to ignored `qa/`. Optional `AGENCY_TEST_URL` changes the test origin.
+`npm run check` runs `scripts/check-agency.mjs`, checks all 24 routes at 1440, 1024, 768, 390 and 320 pixels, internal links and anchors, metadata, mobile navigation, FAQ, goal tabs and keyboard controls, motion preferences, brief downloads and mocked submission outcomes. Screenshots and reports are written to ignored `qa/`. Optional `AGENCY_TEST_URL` changes the test origin. `src/growth.css` styles the newer service, solution and engagement sections.
 
 The GitHub `main` branch contains source and build output. The `production` branch contains only the `dist/` tree for Hostinger deployment. Do not publish source directories into the domain document root.
 
