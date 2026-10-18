@@ -1,0 +1,31 @@
+# Main-domain SEO routing. Hostinger already redirects HTTP to HTTPS.
+Options -Indexes
+DirectoryIndex index.html index.php
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.yugandco\.com$ [NC]
+RewriteRule ^ https://yugandco.com%{REQUEST_URI} [R=301,L,NE]
+
+# Block duplicate deployment pages; filesystem Git deployment remains available.
+RewriteCond %{HTTP_HOST} ^yugandco\.com$ [NC]
+RewriteRule ^yug-production-release(?:/|$) - [R=404,L]
+
+# Redirect only an explicitly requested index file, not directory-index resolution.
+RewriteCond %{HTTP_HOST} ^yugandco\.com$ [NC]
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L,NE]
+
+RewriteCond %{HTTP_HOST} ^yugandco\.com$ [NC]
+RewriteRule ^default\.php$ / [R=301,L]
+</IfModule>
+<IfModule mod_headers.c>
+<FilesMatch "\.html$">
+Header set Cache-Control "no-cache"
+</FilesMatch>
+<FilesMatch "^\.">
+Header set X-Robots-Tag "noindex, nofollow"
+</FilesMatch>
+</IfModule>
+<FilesMatch "^(?:\.git|\.env|\.htaccess)">
+Require all denied
+</FilesMatch>
