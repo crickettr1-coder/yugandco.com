@@ -4,6 +4,18 @@ An original, static HTML/CSS/JavaScript digital marketing company website with 2
 
 ## Current agency design
 
+## SEO implementation
+
+`content/seo.js` contains page-specific search titles and descriptions. `templates/seo.mjs` adds consistent social metadata, visible breadcrumbs and Organization, WebSite, WebPage, Service, Article and collection structured data using verified site content. It also links the practical guides to relevant service pages. No address, reviews, client results or author dates are invented.
+
+`npm run check:seo` checks all 24 pages, schema JSON, canonical URLs, sitemap coverage, robots rules and responsive image assets. `npm run check` covers layouts, navigation and interactions. The original hero is re-encoded into 480, 800 and 1254 pixel WebP files by `node scripts/optimize-hero.mjs`; the build uses those committed assets without requiring regeneration.
+
+`templates/hosting.htaccess` is copied to `dist/.htaccess`. It canonicalises www and explicit index.html requests, redirects Hostinger’s default.php placeholder, disables directory listing and returns 404 for the duplicate release directory on the main domain. Hostinger already supplies the HTTP-to-HTTPS redirect. Deployment must copy `.htaccess` explicitly as well as the visible production files. The sitemap contains the 24 canonical pages and robots.txt references it.
+
+Search Console submission was not completed: the connected GSC Wizard account reports an expired trial/no active subscription. Submit `https://yugandco.com/sitemap.xml` in a verified Google Search Console property when account access is available. Target locations and public business contact details remain unconfirmed, so no local-business address or location-targeted claims are added.
+
+## Creative design
+
 The current creative agency version uses lavender, cobalt, peach and warm white. `templates/creative.mjs` adds an original sculptural ribbon hero, illustrative campaign previews and the Work navigation link to the shared company pages. `src/creative.css` adds the creative visual system, responsive layouts and motion. The existing original `assets/blue-ribbon.png` is the hero artwork. Motion has an explicit pause/resume control and follows reduced-motion preferences.
 
 The 24 pages include Home, About, Services, eight individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact, Privacy, a Solutions hub, three business-specific solution pages and Working Together. Each service page has a practical visual explanation, customer journey, measurement definitions and four FAQs. Campaign plans and design previews are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
