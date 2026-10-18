@@ -4,7 +4,9 @@ An original, static HTML/CSS/JavaScript digital marketing company website with 1
 
 ## Current agency design
 
-The October 2026 agency version uses a deep green, warm white and lime visual system with original HTML/CSS marketing diagrams. It includes Home, About, Services, six individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact and Privacy. Campaign plans are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
+The current creative agency version uses lavender, cobalt, peach and warm white. `templates/creative.mjs` adds an original sculptural ribbon hero, illustrative campaign previews and the Work navigation link to the shared company pages. `src/creative.css` adds the creative visual system, responsive layouts and motion. The existing original `assets/blue-ribbon.png` is the hero artwork. Motion has an explicit pause/resume control and follows reduced-motion preferences.
+
+The 17 pages include Home, About, Services, six individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact and Privacy. Campaign plans and design previews are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
 
 Without a delivery endpoint or verified business email, the contact form downloads a local text brief and does not send an enquiry. Add approved public contact details to `site.config.js` and rebuild. With an email configured, the form opens a prepared email for the visitor to review and send. With an endpoint configured, success requires an HTTP 2xx response and `{ "accepted": true }`.
 

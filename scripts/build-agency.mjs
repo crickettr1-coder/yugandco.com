@@ -1,11 +1,13 @@
 import {mkdir,writeFile,copyFile,cp,readFile} from 'node:fs/promises';
 import config from '../site.config.js';
 import {createAgency} from '../templates/agency.mjs';
-const pages=createAgency(config);
+import {addCreativeLayer} from '../templates/creative.mjs';
+const pages=addCreativeLayer(createAgency(config));
 await mkdir('dist/assets',{recursive:true});
 for(const page of pages){const dir='dist'+page.route;await mkdir(dir,{recursive:true});await writeFile(dir+'index.html',page.html);}
-await writeFile('dist/styles.css',(await readFile('assets/fonts/urbanist.css','utf8'))+'\n'+await readFile('src/agency.css','utf8'));
+await writeFile('dist/styles.css',(await readFile('assets/fonts/urbanist.css','utf8'))+'\n'+await readFile('src/agency.css','utf8')+'\n'+await readFile('src/creative.css','utf8'));
 await copyFile('src/agency.js','dist/app.js');
+await copyFile('assets/blue-ribbon.png','dist/assets/blue-ribbon.png');
 await cp('assets/fonts','dist/assets/fonts',{recursive:true});
 await writeFile('dist/config.json',JSON.stringify(config,null,2));
 await writeFile('dist/assets/favicon.svg','<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#122320"/><text x="14" y="45" font-family="Arial" font-size="45" font-weight="bold" fill="#dbfa73">y.</text></svg>');

@@ -4,6 +4,27 @@ const closeMenu=()=>{toggle?.setAttribute('aria-expanded','false');nav?.classLis
 toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));nav?.classList.toggle('open',open);});
 nav?.addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){closeMenu();toggle.focus();}});
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+let motionPaused=reducedMotion.matches;
+const motionButton=document.querySelector('.motion-control');
+function setMotion(paused){
+ motionPaused=paused;document.documentElement.dataset.motion=paused?'paused':'playing';
+ if(motionButton){motionButton.setAttribute('aria-pressed',String(paused));motionButton.innerHTML=paused?'Resume motion <span aria-hidden="true">▶</span>':'Pause motion <span aria-hidden="true">Ⅱ</span>';}
+ if(paused){document.querySelectorAll('.reveal-ready').forEach(el=>el.classList.add('is-visible'));}
+}
+setMotion(motionPaused);
+motionButton?.addEventListener('click',()=>setMotion(!motionPaused));
+reducedMotion.addEventListener('change',event=>setMotion(event.matches));
+if(!reducedMotion.matches&&'IntersectionObserver' in window){
+ const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target);}}),{threshold:.08});
+ document.querySelectorAll('.section-heading,.principles article,.service-card,.showcase-card,.insight-card,.process-grid article,.delivery-list article').forEach((el,i)=>{el.classList.add('reveal-ready');el.style.setProperty('--reveal-delay',`${i%3*60}ms`);observer.observe(el);});
+}
+const art=document.querySelector('.creative-art');
+art?.addEventListener('pointermove',event=>{
+ if(motionPaused||event.pointerType==='touch'||!matchMedia('(hover: hover)').matches)return;
+ const r=art.getBoundingClientRect();art.style.setProperty('--tilt-x',`${(event.clientX-r.left-r.width/2)/r.width*12}deg`);art.style.setProperty('--tilt-y',`${-(event.clientY-r.top-r.height/2)/r.height*8}deg`);
+});
+art?.addEventListener('pointerleave',()=>{art.style.setProperty('--tilt-x','0deg');art.style.setProperty('--tilt-y','0deg');});
 const form=document.querySelector('#enquiry-form');
 const status=document.querySelector('#form-status');
 if(form){

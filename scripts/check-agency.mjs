@@ -19,6 +19,7 @@ try{
   assert(await page.locator('meta[name="description"]').getAttribute('content'));
   assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'),config.domain+p.route);
   assert(!/[\uFFFD]|â€|Ã¢/.test(await page.locator('body').innerText()),p.route+' text encoding');
+  assert(await page.locator('img').evaluateAll(imgs=>imgs.every(i=>i.complete&&i.naturalWidth>0)),p.route+' image loading');
   for(const width of [1440,768,390,320]){await page.setViewportSize({width,height:900});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),p.route+' overflow '+width);}
   (await page.locator('a[href]').evaluateAll(a=>a.map(e=>e.getAttribute('href')))).filter(h=>h.startsWith('/')||h.startsWith('#')).forEach(h=>links.add(new URL(h,origin+p.route).href));
   if(['/','/about/','/services/google-ads/','/contact/','/insights/seo-or-paid-search/'].includes(p.route)){
@@ -31,6 +32,7 @@ try{
  await page.getByRole('button',{name:'Menu'}).click();assert(await page.locator('#navigation').isVisible());await page.keyboard.press('Escape');assert.equal(await page.getByRole('button',{name:'Menu'}).getAttribute('aria-expanded'),'false');
  await page.getByRole('button',{name:'Menu'}).click();await page.locator('#navigation').getByRole('link',{name:'About',exact:true}).click();await page.waitForURL('**/about/');
  await page.goto(origin+'/');await page.locator('summary').first().click();assert.notEqual(await page.locator('details').first().getAttribute('open'),null);
+ await page.emulateMedia({reducedMotion:'no-preference'});await page.reload();await page.getByRole('button',{name:'Pause motion'}).click();assert.equal(await page.locator('html').getAttribute('data-motion'),'paused');assert.equal(await page.locator('.ticker-track').evaluate(e=>getComputedStyle(e).animationPlayState),'paused');await page.getByRole('button',{name:'Resume motion'}).click();assert.equal(await page.locator('html').getAttribute('data-motion'),'playing');await page.emulateMedia({reducedMotion:'reduce'});await page.reload();assert.equal(await page.locator('.ticker-track').evaluate(e=>getComputedStyle(e).animationName),'none');
  await page.goto(origin+'/contact/?service=Google%20Ads');assert.equal(await page.locator('[name="service"]').inputValue(),'Google Ads');
  const fill=async()=>{await page.locator('[name="name"]').fill('Local QA');await page.locator('[name="email"]').fill('test@example.com');await page.locator('[name="company"]').fill('QA only');await page.locator('[name="service"]').selectOption('Google Ads');await page.locator('[name="message"]').fill('Local validation only. No real enquiry.');};
  await fill();
@@ -39,7 +41,7 @@ try{
   await page.route('**/config.json',r=>r.fulfill({json:{enquiryEndpoint:'/qa-enquiry'}}));await page.route('**/qa-enquiry',r=>r.fulfill({status,json:{accepted}}));await page.reload();await fill();await page.locator('form button').click();await page.waitForFunction(t=>document.querySelector('#form-status').textContent.toLowerCase().includes(t),text);await page.unroute('**/config.json');await page.unroute('**/qa-enquiry');
  }
  assert.deepEqual(errors,[],'Browser errors');
- report.push('All internal links, mobile menu, Escape, FAQ and service selection passed.');
+ report.push('All internal links, mobile menu, Escape, FAQ, service selection, motion pause/resume and reduced motion passed.');
  report.push('Local brief download and mocked enquiry failure/acceptance checks passed. No actual enquiries sent.');
  await writeFile('qa/agency-report.txt',report.join('\n'));console.log(report.join('\n'));
 }finally{await browser.close();}
