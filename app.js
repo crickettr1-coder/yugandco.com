@@ -4,6 +4,9 @@ const closeMenu=()=>{toggle?.setAttribute('aria-expanded','false');nav?.classLis
 toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));nav?.classList.toggle('open',open);});
 nav?.addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){closeMenu();toggle.focus();}});
+const goalTabs=[...document.querySelectorAll('[data-goal]')];
+function activateGoal(index){goalTabs.forEach((tab,i)=>{tab.setAttribute('aria-selected',String(i===index));tab.tabIndex=i===index?0:-1;document.getElementById(tab.getAttribute('aria-controls')).hidden=i!==index;});}
+goalTabs.forEach((tab,index)=>{tab.addEventListener('click',()=>activateGoal(index));tab.addEventListener('keydown',event=>{let next;if(['ArrowRight','ArrowDown'].includes(event.key))next=(index+1)%goalTabs.length;else if(['ArrowLeft','ArrowUp'].includes(event.key))next=(index+goalTabs.length-1)%goalTabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=goalTabs.length-1;else return;event.preventDefault();activateGoal(next);goalTabs[next].focus();});});
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 let motionPaused=reducedMotion.matches;
 const motionButton=document.querySelector('.motion-control');
@@ -35,7 +38,7 @@ if(form){
  form.addEventListener('submit',async event=>{
   event.preventDefault();if(!form.reportValidity()||!config)return;
   const data=Object.fromEntries(new FormData(form));
-  const brief=`YUG & CO — PROJECT BRIEF\n\nName: ${data.name}\nEmail: ${data.email}\nCompany / website: ${data.company}\nService: ${data.service}\n\nProject details\n${data.message}\n`;
+  const brief=`YUG & CO — PROJECT BRIEF\n\nName: ${data.name}\nEmail: ${data.email}\nCompany / website: ${data.company}\nService: ${data.service}\nPreferred timing: ${data.timeline||'To be discussed'}\n\nProject details\n${data.message}\n`;
   if(!config.enquiryEndpoint){
    if(config.email){location.href=`mailto:${encodeURIComponent(config.email)}?subject=${encodeURIComponent('Project enquiry: '+data.service)}&body=${encodeURIComponent(brief)}`;status.textContent='Your email app has been requested. Review and send the message there; this website has not sent it.';}
    else{const url=URL.createObjectURL(new Blob([brief],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='yug-and-co-project-brief.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Your brief is ready to save. No enquiry has been sent and your details remain here.';}
