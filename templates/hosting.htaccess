@@ -8,7 +8,8 @@ RewriteRule ^ https://yugandco.com%{REQUEST_URI} [R=301,L,NE]
 
 # Block duplicate deployment pages; filesystem Git deployment remains available.
 RewriteCond %{HTTP_HOST} ^yugandco\.com$ [NC]
-RewriteRule ^yug-production-release(?:/|$) - [R=404,L]
+RewriteCond %{REQUEST_URI} ^/yug-production-release(?:/|$) [NC]
+RewriteRule ^ - [R=404,L]
 
 # Redirect only an explicitly requested index file, not directory-index resolution.
 RewriteCond %{HTTP_HOST} ^yugandco\.com$ [NC]
