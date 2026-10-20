@@ -1,6 +1,7 @@
 # Main-domain SEO routing. Hostinger already redirects HTTP to HTTPS.
 Options -Indexes
 DirectoryIndex index.html index.php
+ErrorDocument 404 /404/
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^www\.yugandco\.com$ [NC]
@@ -27,6 +28,6 @@ Header set Cache-Control "no-cache"
 Header set X-Robots-Tag "noindex, nofollow"
 </FilesMatch>
 </IfModule>
-<FilesMatch "^(?:\.git|\.env|\.htaccess)">
+<FilesMatch "^(?:\.git|\.env(?:\..*)?|\.htaccess|composer\.(?:json|lock)|.*\.(?:log|sql|sqlite|db))$">
 Require all denied
 </FilesMatch>

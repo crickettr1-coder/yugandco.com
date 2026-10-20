@@ -3,7 +3,7 @@ import {services} from '../content/services.js';
 import {insights} from '../content/insights.js';
 import {solutions} from '../content/growth.js';
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const labels={'/':'Home','/about/':'About','/services/':'Services','/solutions/':'Solutions','/insights/':'Insights','/approach/':'Our approach','/work/':'Campaign thinking','/contact/':'Contact','/privacy/':'Privacy','/working-together/':'Working together'};
+const labels={'/':'Home','/about/':'About','/services/':'Services','/work/':'Work','/solutions/':'Solutions','/insights/':'Insights','/approach/':'Our approach','/contact/':'Contact','/privacy/':'Privacy','/working-together/':'Working together'};
 for(const s of services)labels[`/services/${s.slug}/`]=s.name;
 for(const s of solutions)labels[`/solutions/${s.slug}/`]=s.name;
 for(const a of insights)labels[`/insights/${a.slug}/`]=a.title;
@@ -14,7 +14,7 @@ export function optimizeSEO(pages,config){return pages.map(p=>{
  .replace(/<meta name="description" content="[^"]*">/,`<meta name="description" content="${escape(description)}">`)
  .replace(/<meta property="og:title" content="[^"]*">/,`<meta property="og:title" content="${escape(title)}">`)
  .replace(/<meta property="og:description" content="[^"]*">/,`<meta property="og:description" content="${escape(description)}">`)
- .replace(/<meta name="theme-color" content="[^"]*">/,'<meta name="theme-color" content="#6842d6">')
+ .replace(/<meta name="theme-color" content="[^"]*">/,'<meta name="theme-color" content="#2448ff">')
  .replaceAll('creative-v3-20261018','seo-v1-20261018')
  .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g,'');
  const root=config.domain;const url=root+p.route;const orgId=root+'/#organization';const websiteId=root+'/#website';
@@ -37,7 +37,8 @@ export function optimizeSEO(pages,config){return pages.map(p=>{
  const list=p.route==='/services/'?services.map(s=>({name:s.name,url:root+`/services/${s.slug}/`})) :p.route==='/solutions/'?solutions.map(s=>({name:s.name,url:root+`/solutions/${s.slug}/`})) :p.route==='/insights/'?insights.map(a=>({name:a.title,url:root+`/insights/${a.slug}/`})) :null;
  if(list){const id=url+'#list';webPage.mainEntity={'@id':id};graph.push({'@type':'ItemList','@id':id,itemListElement:list.map((v,i)=>({'@type':'ListItem',position:i+1,...v}))});}
  const json=JSON.stringify({'@context':'https://schema.org','@graph':graph}).replace(/</g,'\\u003c');
- html=html.replace('</head>',`<meta name="robots" content="index,follow,max-image-preview:large"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escape(title)}"><meta name="twitter:description" content="${escape(description)}"><meta name="twitter:image" content="${root}/assets/blue-ribbon-1254.webp"><link rel="preload" href="/assets/fonts/urbanist-14.woff2" as="font" type="font/woff2" crossorigin><script type="application/ld+json">${json}</script></head>`);
+ const robots=['/reviews/','/404/'].includes(p.route)?'noindex,nofollow':'index,follow,max-image-preview:large';
+ html=html.replace('</head>',`<meta name="robots" content="${robots}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escape(title)}"><meta name="twitter:description" content="${escape(description)}"><meta name="twitter:image" content="${root}/assets/blue-ribbon-1254.webp"><link rel="preload" href="/assets/fonts/urbanist-14.woff2" as="font" type="font/woff2" crossorigin><script type="application/ld+json">${json}</script></head>`);
  html=html.replace(/<meta property="og:image" content="[^"]*">/,`<meta property="og:image" content="${root}/assets/blue-ribbon-1254.webp">`);
  if(p.route==='/'){
   html=html.replace('STRATEGY MEETS A LITTLE SPARK','DIGITAL MARKETING &amp; CREATIVE AGENCY');

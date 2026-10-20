@@ -4,7 +4,7 @@ import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {createAgency} from '../templates/agency.mjs';
 import config from '../site.config.js';
 const origin=process.env.AGENCY_TEST_URL||'http://127.0.0.1:4173';
-const pages=createAgency(config);
+const pages=createAgency(config).filter(p=>p.route!=='/reviews/');
 const browser=await chromium.launch({channel:'msedge',headless:true});
 await mkdir('qa',{recursive:true});
 const report=[];
@@ -30,11 +30,14 @@ try{
  for(const href of links){const u=new URL(href);const r=await page.request.get(u.href);assert.equal(r.status(),200,'Link '+href);if(u.hash){await page.goto(u.href);assert(await page.locator(u.hash).count(),'Anchor '+href);}}
  await page.setViewportSize({width:390,height:900});await page.goto(origin+'/');
  await page.getByRole('button',{name:'Menu'}).click();assert(await page.locator('#navigation').isVisible());await page.keyboard.press('Escape');assert.equal(await page.getByRole('button',{name:'Menu'}).getAttribute('aria-expanded'),'false');
+ await page.getByRole('button',{name:'Menu'}).click();await page.locator('.nav-dropdown summary').click();assert(await page.locator('.nav-dropdown a[href="/services/google-ads/"]').isVisible());await page.keyboard.press('Escape');
  await page.getByRole('button',{name:'Menu'}).click();await page.locator('#navigation').getByRole('link',{name:'About',exact:true}).click();await page.waitForURL('**/about/');
  await page.goto(origin+'/');await page.locator('summary').first().click();assert.notEqual(await page.locator('details').first().getAttribute('open'),null);
- await page.getByRole('tab',{name:'Stand out'}).click();assert(await page.locator('#goal-brand').isVisible());assert(await page.locator('#goal-discover').isHidden());await page.getByRole('tab',{name:'Stand out'}).press('ArrowRight');assert(await page.locator('#goal-website').isVisible());await page.getByRole('tab',{name:'Improve my website'}).press('End');assert(await page.locator('#goal-plan').isVisible());
- await page.emulateMedia({reducedMotion:'no-preference'});await page.reload();await page.getByRole('button',{name:'Pause motion'}).click();assert.equal(await page.locator('html').getAttribute('data-motion'),'paused');assert.equal(await page.locator('.ticker-track').evaluate(e=>getComputedStyle(e).animationPlayState),'paused');await page.getByRole('button',{name:'Resume motion'}).click();assert.equal(await page.locator('html').getAttribute('data-motion'),'playing');await page.emulateMedia({reducedMotion:'reduce'});await page.reload();assert.equal(await page.locator('.ticker-track').evaluate(e=>getComputedStyle(e).animationName),'none');
+ const needs=page.locator('.need-row');assert.equal(await needs.count(),4);await needs.nth(1).locator('summary').click();assert(await needs.nth(1).getAttribute('open')!==null);await needs.nth(0).locator('summary').click();assert.equal(await needs.nth(0).getAttribute('open'),null);
+ await page.emulateMedia({reducedMotion:'no-preference'});await page.reload();await page.getByRole('button',{name:'Pause motion'}).click();assert.equal(await page.locator('html').getAttribute('data-motion'),'paused');await page.getByRole('button',{name:'Resume motion'}).click();assert.equal(await page.locator('html').getAttribute('data-motion'),'playing');await page.getByRole('button',{name:'Pause strip'}).click();assert.equal(await page.locator('.statement-strip').getAttribute('data-paused'),'true');await page.emulateMedia({reducedMotion:'reduce'});await page.reload();assert.equal(await page.locator('.statement-track').evaluate(e=>getComputedStyle(e).animationName),'none');
  await page.goto(origin+'/contact/?service=Google%20Ads');assert.equal(await page.locator('[name="service"]').inputValue(),'Google Ads');
+ await page.goto(origin+'/work/');assert.equal(await page.locator('.filter-button').count(),5);await page.getByRole('button',{name:'SEO',exact:true}).click();assert.equal(await page.locator('.project-card:not([hidden])').count(),1);assert(await page.locator('.project-card[hidden]').count()>=1);assert.equal(await page.locator('a[href="/reviews/"]').count(),0);
+ await page.goto(origin+'/contact/');assert(await page.locator('[name="phone"]').count());assert(await page.locator('[name="budget"]').count());assert(await page.locator('[name="timeline"]').count());
  const fill=async()=>{await page.locator('[name="name"]').fill('Local QA');await page.locator('[name="email"]').fill('test@example.com');await page.locator('[name="company"]').fill('QA only');await page.locator('[name="service"]').selectOption('Google Ads');await page.locator('[name="message"]').fill('Local validation only. No real enquiry.');};
  await fill();
  if(!config.enquiryEndpoint&&!config.email){const downloadPromise=page.waitForEvent('download');await page.locator('form button').click();const download=await downloadPromise;assert.equal(download.suggestedFilename(),'yug-and-co-project-brief.txt');await download.saveAs('qa/project-brief.txt');assert((await readFile('qa/project-brief.txt','utf8')).includes('Local QA'));assert((await page.locator('#form-status').innerText()).includes('No enquiry has been sent'));assert.equal(await page.locator('[name="name"]').inputValue(),'Local QA');}
@@ -42,7 +45,7 @@ try{
   await page.route('**/config.json',r=>r.fulfill({json:{enquiryEndpoint:'/qa-enquiry'}}));await page.route('**/qa-enquiry',r=>r.fulfill({status,json:{accepted}}));await page.reload();await fill();await page.locator('form button').click();await page.waitForFunction(t=>document.querySelector('#form-status').textContent.toLowerCase().includes(t),text);await page.unroute('**/config.json');await page.unroute('**/qa-enquiry');
  }
  assert.deepEqual(errors,[],'Browser errors');
- report.push('All internal links, mobile menu, Escape, FAQ, goal tabs and keyboard navigation, service selection, motion pause/resume and reduced motion passed.');
- report.push('Local brief download and mocked enquiry failure/acceptance checks passed. No actual enquiries sent.');
+ report.push('All internal links, mobile menu, Escape, FAQ, business-need accordions and keyboard navigation, service selection, motion pause/resume and reduced motion passed.');
+ report.push('Mocked enquiry failure/acceptance checks passed. No actual enquiries sent.');
  await writeFile('qa/agency-report.txt',report.join('\n'));console.log(report.join('\n'));
 }finally{await browser.close();}

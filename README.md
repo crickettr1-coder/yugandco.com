@@ -1,6 +1,6 @@
 # Yug & Co
 
-An original, static HTML/CSS/JavaScript digital marketing company website with 24 pages. Shared page templates live in `templates/agency.mjs`; `templates/growth.mjs` and `content/growth.js` add service explanations, business solutions and an interactive goal selector. Public business details live in `site.config.js`. `npm run build` runs `scripts/build-agency.mjs` and generates deployable files in `dist/`.
+An original, static HTML/CSS/JavaScript digital marketing company website with 32 generated routes. Shared page templates live in `templates/agency.mjs`; `templates/growth.mjs` and the structured content modules add service explanations, business solutions, portfolio detail pages, FAQs and an interactive goal selector. Public business details live in `site.config.js`. `npm run build` runs `scripts/build-agency.mjs` and generates deployable files in `dist/`.
 
 ## Current agency design
 
@@ -8,7 +8,7 @@ An original, static HTML/CSS/JavaScript digital marketing company website with 2
 
 `content/seo.js` contains page-specific search titles and descriptions. `templates/seo.mjs` adds consistent social metadata, visible breadcrumbs and Organization, WebSite, WebPage, Service, Article and collection structured data using verified site content. It also links the practical guides to relevant service pages. No address, reviews, client results or author dates are invented.
 
-`npm run check:seo` checks all 24 pages, schema JSON, canonical URLs, sitemap coverage, robots rules and responsive image assets. `npm run check` covers layouts, navigation and interactions. The original hero is re-encoded into 480, 800 and 1254 pixel WebP files by `node scripts/optimize-hero.mjs`; the build uses those committed assets without requiring regeneration.
+`npm run check:seo` checks all 32 generated routes, schema JSON, canonical URLs, sitemap coverage, robots rules and responsive image assets. `npm run check` covers layouts, navigation, work filters and interactions. The original hero is re-encoded into 480, 800 and 1254 pixel WebP files by `node scripts/optimize-hero.mjs`; the build uses those committed assets without requiring regeneration.
 
 `templates/hosting.htaccess` is copied to `dist/.htaccess`. It canonicalises www and explicit index.html requests, redirects Hostinger’s default.php placeholder, disables directory listing and returns 404 for the duplicate release directory on the main domain. Hostinger already supplies the HTTP-to-HTTPS redirect. Deployment must copy `.htaccess` explicitly as well as the visible production files. The sitemap contains the 24 canonical pages and robots.txt references it.
 
@@ -18,11 +18,11 @@ Search Console submission was not completed: the connected GSC Wizard account re
 
 The current creative agency version uses lavender, cobalt, peach and warm white. `templates/creative.mjs` adds an original sculptural ribbon hero, illustrative campaign previews and the Work navigation link to the shared company pages. `src/creative.css` adds the creative visual system, responsive layouts and motion. The existing original `assets/blue-ribbon.png` is the hero artwork. Motion has an explicit pause/resume control and follows reduced-motion preferences.
 
-The 24 pages include Home, About, Services, eight individual service pages, Approach, Campaign Thinking, Insights, three guides, Contact, Privacy, a Solutions hub, three business-specific solution pages and Working Together. Each service page has a practical visual explanation, customer journey, measurement definitions and four FAQs. Campaign plans and design previews are explicitly illustrative; no client commissions, results, team members or testimonials are invented.
+The generated site includes Home, About, Services, eight individual service pages, a filterable Work portfolio with three concept detail pages, Approach, Insights, three guides, Contact, Privacy, FAQ, Website Terms, Cookies & Tracking, a branded 404, a Solutions hub, three business-specific solution pages and Working Together. Reviews has a reusable unpublished template and is excluded from navigation and sitemap until approved feedback exists. Each service page has a practical visual explanation, customer journey, measurement definitions and service-specific FAQs. No client commissions, results, team members or testimonials are invented.
 
-Without a delivery endpoint or verified business email, the contact form downloads a local text brief and does not send an enquiry. Add approved public contact details to `site.config.js` and rebuild. With an email configured, the form opens a prepared email for the visitor to review and send. With an endpoint configured, success requires an HTTP 2xx response and `{ "accepted": true }`.
+The contact form posts to `/contact.php`. The endpoint requires authenticated SMTP environment variables on the production host and returns `{ "accepted": true }` only after the SMTP server accepts the message. The local preview server deliberately returns a non-success response for PHP because it cannot execute PHP; no local submission is described as delivered.
 
-`npm run check` runs `scripts/check-agency.mjs`, checks all 24 routes at 1440, 1024, 768, 390 and 320 pixels, internal links and anchors, metadata, mobile navigation, FAQ, goal tabs and keyboard controls, motion preferences, brief downloads and mocked submission outcomes. Screenshots and reports are written to ignored `qa/`. Optional `AGENCY_TEST_URL` changes the test origin. `src/growth.css` styles the newer service, solution and engagement sections.
+`npm run check` runs `scripts/check-agency.mjs`, checks all 24 routes at 1440, 1024, 768, 390 and 320 pixels, internal links and anchors, metadata, mobile navigation, FAQ, goal tabs and keyboard controls, motion preferences and mocked submission outcomes. Screenshots and reports are written to ignored `qa/`. Optional `AGENCY_TEST_URL` changes the test origin. `src/growth.css` styles the newer service, solution and engagement sections.
 
 The GitHub `main` branch contains source and build output. The `production` branch contains only the `dist/` tree for Hostinger deployment. Do not publish source directories into the domain document root.
 
@@ -38,7 +38,7 @@ npm run build
 npm run dev
 ```
 
-Open http://127.0.0.1:4173. Stop with Ctrl+C. No application dependencies or backend are required for the static website. The development dependency is used only for browser validation.
+Open http://127.0.0.1:4173. Stop with Ctrl+C. The local server serves the static site only; PHP delivery requires the Hostinger runtime. Use `PORT=4174` (PowerShell: `$env:PORT='4174'`) when another preview server is already using 4173.
 
 ## Edit
 
@@ -63,7 +63,7 @@ Run `npm run build` after edits. Upload the contents of `dist/` to a static host
 4. Put the HTTPS endpoint in `site.config.js` as `enquiryEndpoint`, then rebuild.
 5. Update the privacy notice with verified contact details, provider and retention information before enabling live enquiries. Verify an actual enquiry reaches the configured destination.
 
-Without an endpoint, submitting never sends information or claims success. No phone, email, clients, testimonials, awards, experience figures or performance results are invented. Both portfolio projects are explicitly fictional concepts.
+The contact form posts to `contact.php`, which validates the request, rate-limits by IP and uses the host mail transport only when `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` are configured. No phone, email, clients, testimonials, awards, experience figures or performance results are invented. Work previews are explicitly labelled design concepts.
 
 ## Validate
 

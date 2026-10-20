@@ -11,7 +11,7 @@ export const seo={
  '/services/digital-marketing-strategy/':['Digital Marketing Strategy & Planning','Connect your business goals with a practical marketing roadmap. Explore Yug & Co’s audience discovery, channel planning, priorities and measurement.'],
  '/services/analytics-conversion-tracking/':['Analytics & Conversion Tracking Services','Understand important website actions with Yug & Co. Explore measurement plans, event setup, conversion checks and reporting with clear definitions.'],
  '/approach/':['Our Digital Marketing Process','See how Yug & Co takes work from discovery and planning to launch and improvement, with clear deliverables, review stages and shared responsibilities.'],
- '/work/':['Campaign Concepts & Marketing Plans','Explore illustrative website, paid media and search concepts from Yug & Co. See how a business objective can connect creative, channels and measurement.'],
+ '/work/':['Work & Design Concepts','Explore clearly labelled Yug & Co design concepts showing how strategy can shape websites, campaigns and search experiences.'],
  '/insights/':['Digital Marketing Insights & Guides','Read practical Yug & Co guides to marketing briefs, SEO versus paid search and purposeful social content. Find a clearer starting point for your business.'],
  '/insights/start-with-a-clear-creative-brief/':['How to Write a Clear Creative Brief','Create a more useful creative brief. Define the objective, audience, offer, evidence and practical requirements before developing campaign ideas.'],
  '/insights/seo-or-paid-search/':['SEO or Paid Search: How to Choose','Compare SEO and paid search around your business goals, timeframe, website and budget. Learn what to review before choosing a starting channel.'],
@@ -23,4 +23,13 @@ export const seo={
  '/solutions/product-brands/':['Marketing for Product & Ecommerce Brands','Connect product messaging, Meta Ads, creative and analytics. Explore a practical campaign planning framework for product and ecommerce brands.'],
  '/solutions/b2b-and-startups/':['Digital Marketing for B2B & Startups','Make a complex offer easier to understand. Explore a connected strategy, content and website planning framework for B2B businesses and startups.'],
  '/working-together/':['Marketing Projects & Ongoing Support','Explore how Yug & Co engagements work: strategy projects, focused delivery and ongoing support, with clear scope, approvals, ownership and reporting.']
+ ,'/work/':['Yug & Co Work & Design Concepts','Explore original Yug & Co design concepts across websites, SEO, paid ads and social creative, with clear notes on scope and status.']
+ ,'/work/connected-digital-home/':['A Clearer Digital Home | Yug & Co','See the brief, approach and deliverables behind Yug & Co’s independent website design concept.']
+ ,'/work/search-with-purpose/':['Search With Purpose | Yug & Co','See the brief, approach and deliverables behind Yug & Co’s independent SEO concept.']
+ ,'/work/campaign-worth-noticing/':['A Campaign Worth Noticing | Yug & Co','See the brief, approach and deliverables behind Yug & Co’s independent paid social concept.']
+ ,'/faq/':['Digital Marketing FAQs | Yug & Co','Useful answers about Yug & Co services, scope, budgets, communication, websites and measurement.']
+ ,'/reviews/':['Client Feedback | Yug & Co','A reusable Yug & Co testimonial page prepared for approved client feedback.']
+ ,'/terms/':['Website Terms | Yug & Co','Plain-language terms for using the Yug & Co website, separate from client service agreements.']
+ ,'/cookies/':['Cookies & Tracking | Yug & Co','How Yug & Co currently handles cookies, analytics and browser storage.']
+ ,'/404/':['Page Not Found | Yug & Co','The Yug & Co page you requested could not be found.']
 };

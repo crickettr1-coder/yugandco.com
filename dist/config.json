@@ -3,5 +3,6 @@
   "domain": "https://yugandco.com",
   "email": "",
   "phone": "",
-  "enquiryEndpoint": ""
+  "enquiryEndpoint": "/contact.php",
+  "analyticsMeasurementId": "G-9Q6H0QETRF"
 }
