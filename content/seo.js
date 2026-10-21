@@ -11,7 +11,6 @@ export const seo={
  '/services/digital-marketing-strategy/':['Digital Marketing Strategy & Planning','Connect your business goals with a practical marketing roadmap. Explore Yug & Co’s audience discovery, channel planning, priorities and measurement.'],
  '/services/analytics-conversion-tracking/':['Analytics & Conversion Tracking Services','Understand important website actions with Yug & Co. Explore measurement plans, event setup, conversion checks and reporting with clear definitions.'],
  '/approach/':['Our Digital Marketing Process','See how Yug & Co takes work from discovery and planning to launch and improvement, with clear deliverables, review stages and shared responsibilities.'],
- '/work/':['Work & Design Concepts','Explore clearly labelled Yug & Co design concepts showing how strategy can shape websites, campaigns and search experiences.'],
  '/insights/':['Digital Marketing Insights & Guides','Read practical Yug & Co guides to marketing briefs, SEO versus paid search and purposeful social content. Find a clearer starting point for your business.'],
  '/insights/start-with-a-clear-creative-brief/':['How to Write a Clear Creative Brief','Create a more useful creative brief. Define the objective, audience, offer, evidence and practical requirements before developing campaign ideas.'],
  '/insights/seo-or-paid-search/':['SEO or Paid Search: How to Choose','Compare SEO and paid search around your business goals, timeframe, website and budget. Learn what to review before choosing a starting channel.'],

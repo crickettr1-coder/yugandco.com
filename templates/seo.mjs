@@ -9,7 +9,7 @@ for(const s of solutions)labels[`/solutions/${s.slug}/`]=s.name;
 for(const a of insights)labels[`/insights/${a.slug}/`]=a.title;
 export function optimizeSEO(pages,config){return pages.map(p=>{
  const [shortTitle,description]=seo[p.route]||[p.title,p.description];
- const title=shortTitle+' | '+config.brand;
+ const title=shortTitle.endsWith(config.brand)?shortTitle:shortTitle+' | '+config.brand;
  let html=p.html.replace(/<title>[\s\S]*?<\/title>/,`<title>${escape(title)}</title>`)
  .replace(/<meta name="description" content="[^"]*">/,`<meta name="description" content="${escape(description)}">`)
  .replace(/<meta property="og:title" content="[^"]*">/,`<meta property="og:title" content="${escape(title)}">`)
@@ -34,6 +34,8 @@ export function optimizeSEO(pages,config){return pages.map(p=>{
  if(s){const id=url+'#service';webPage.mainEntity={'@id':id};graph.push({'@type':'Service','@id':id,name:s.name,serviceType:s.name,description:s.description,url,provider:{'@id':orgId},mainEntityOfPage:{'@id':webPage['@id']}});}
  const a=insights.find(a=>p.route===`/insights/${a.slug}/`);
  if(a){const id=url+'#article';webPage.mainEntity={'@id':id};graph.push({'@type':'Article','@id':id,headline:a.title,description:a.intro,inLanguage:'en',url,author:{'@id':orgId},publisher:{'@id':orgId},mainEntityOfPage:{'@id':webPage['@id']}});}
+ const work=p.route.startsWith('/work/')&&p.route!=='/work/';
+ if(work){const id=url+'#creative-work';webPage.mainEntity={'@id':id};graph.push({'@type':'CreativeWork','@id':id,name:shortTitle,description,url,creator:{'@id':orgId},mainEntityOfPage:{'@id':webPage['@id']}});}
  const list=p.route==='/services/'?services.map(s=>({name:s.name,url:root+`/services/${s.slug}/`})) :p.route==='/solutions/'?solutions.map(s=>({name:s.name,url:root+`/solutions/${s.slug}/`})) :p.route==='/insights/'?insights.map(a=>({name:a.title,url:root+`/insights/${a.slug}/`})) :null;
  if(list){const id=url+'#list';webPage.mainEntity={'@id':id};graph.push({'@type':'ItemList','@id':id,itemListElement:list.map((v,i)=>({'@type':'ListItem',position:i+1,...v}))});}
  const json=JSON.stringify({'@context':'https://schema.org','@graph':graph}).replace(/</g,'\\u003c');

@@ -1,13 +1,14 @@
-import {mkdir,writeFile,copyFile,cp,readFile} from 'node:fs/promises';
+import {mkdir,writeFile,copyFile,cp,readFile,rm} from 'node:fs/promises';
 import config from '../site.config.js';
 import {createAgency} from '../templates/agency.mjs';
 import {addCreativeLayer} from '../templates/creative.mjs';
 import {enrichPages} from '../templates/growth.mjs';
 import {optimizeSEO} from '../templates/seo.mjs';
 const pages=optimizeSEO(enrichPages(addCreativeLayer(createAgency(config))),config);
+await rm('dist/reviews',{recursive:true,force:true});
 await mkdir('dist/assets',{recursive:true});
 for(const page of pages.filter(page=>page.route!=='/reviews/')){const dir='dist'+page.route;await mkdir(dir,{recursive:true});await writeFile(dir+'index.html',page.html);}
-await writeFile('dist/styles.css',(await readFile('assets/fonts/urbanist.css','utf8'))+'\n'+await readFile('src/agency.css','utf8')+'\n'+await readFile('src/creative.css','utf8')+'\n'+await readFile('src/growth.css','utf8')+'\n'+await readFile('src/seo.css','utf8')+'\n'+await readFile('src/brand-overrides.css','utf8'));
+await writeFile('dist/styles.css',(await readFile('assets/fonts/urbanist.css','utf8'))+'\n'+await readFile('src/agency.css','utf8')+'\n'+await readFile('src/creative.css','utf8')+'\n'+await readFile('src/growth.css','utf8')+'\n'+await readFile('src/seo.css','utf8'));
 await copyFile('src/agency.js','dist/app.js');
 await copyFile('server/contact.php','dist/contact.php');
 await copyFile('assets/blue-ribbon.png','dist/assets/blue-ribbon.png');

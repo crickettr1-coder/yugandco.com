@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFile,stat,mkdir,writeFile} from 'node:fs/promises';
+import {readFile,stat,mkdir,writeFile,access} from 'node:fs/promises';
 import {createAgency} from '../templates/agency.mjs';
 import {services} from '../content/services.js';
 import {insights} from '../content/insights.js';
@@ -19,9 +19,10 @@ for(const p of pages){
  if(p.route!=='/'){assert(html.includes('aria-label="Breadcrumb"'));const bc=graph.find(n=>n['@type']==='BreadcrumbList');assert(bc);assert.equal(bc.itemListElement.at(-1).item,web.url);assert.equal(bc.itemListElement[0].item,config.domain+'/');}
  if(services.some(s=>p.route===`/services/${s.slug}/`))assert(graph.find(n=>n['@type']==='Service'));
  if(insights.some(a=>p.route===`/insights/${a.slug}/`)){assert(graph.find(n=>n['@type']==='Article'));assert(html.includes('class="article-related"'));}
+ if(p.route.startsWith('/work/')&&p.route!=='/work/')assert(graph.find(n=>n['@type']==='CreativeWork'));
  report.push({route:p.route,title,description,titleLength:title.length,descriptionLength:description.length,schemaTypes:graph.map(n=>n['@type'])});
 }
-const sitemap=await readFile('dist/sitemap.xml','utf8');const urls=[...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);const published=pages.filter(p=>!['/reviews/','/404/'].includes(p.route));assert.equal(urls.length,published.length);assert.equal(new Set(urls).size,published.length);for(const p of published)assert(urls.includes(config.domain+p.route));assert(!sitemap.includes('/reviews/'));assert(!sitemap.includes('/404/'));assert(!sitemap.includes('yug-production-release'));
+const sitemap=await readFile('dist/sitemap.xml','utf8');const urls=[...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);const published=pages.filter(p=>!['/reviews/','/404/'].includes(p.route));assert.equal(urls.length,published.length);assert.equal(new Set(urls).size,published.length);for(const p of published)assert(urls.includes(config.domain+p.route));assert(!sitemap.includes('/reviews/'));assert(!sitemap.includes('/404/'));assert(!sitemap.includes('thank-you'));assert(!sitemap.includes('yug-production-release'));try{await access('dist/reviews/index.html');assert.fail('unpublished reviews output');}catch(error){assert.equal(error.code,'ENOENT');}
 const robots=await readFile('dist/robots.txt','utf8');assert(robots.includes('Allow: /'));assert(robots.includes('Disallow: /yug-production-release/'));assert(robots.includes(config.domain+'/sitemap.xml'));
 const htaccess=await readFile('dist/.htaccess','utf8');assert(htaccess.includes('THE_REQUEST'));assert(htaccess.includes('R=301'));assert(htaccess.includes('yug-production-release'));assert(htaccess.includes('R=404'));
 const home=await readFile('dist/index.html','utf8');assert(home.includes('srcset='));assert(home.includes('fetchpriority="high"'));const original=(await stat('assets/blue-ribbon.png')).size;for(const width of [480,800,1254])assert((await stat(`dist/assets/blue-ribbon-${width}.webp`)).size<original*.1);
